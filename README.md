@@ -26,26 +26,38 @@ AMTsolver is a C++ program that calculates the spectral angular momentum (dL/dω
 git clone https://github.com/yourusername/AMTsolver.git
 cd AMTsolver
 mkdir build
+```
 
 # Standard build
+```bash
 g++ -Iinclude -Iinclude/Dielectric/DrudeAl -c src/main.cpp -o build/main.out -lcomplex_bessel
 g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel
+```
 
 # Parallel build (OpenMP)
+```bash
 g++ -fopenmp -O2 -std=c++17 -Iinclude -c src/main.cpp -o build/main.out -lcomplex_bessel
 g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel -fopenmp```
+```
 
 ## Basic Command (example)
+```bash
 ./AMTsolverL51 -a <radius_nm> -b <impact_param_nm> -v <velocity>
+```
 
 ## Single Calculation
+```bash
 ./AMTsolverL51 -a 50.0 -b 55.0 -v 0.7
+```
 
 ## Velocity Scan (20 points)
+```bash
 ./AMTsolverL51 -a 50.0 -b 55.0 --vscan -n 20
+```
 ## Impact parameter scan
+```bash
 ./AMTsolverL51 -a 50.0 -v 0.7 --bscan -n 30 -e 1e-5
-
+```
 ## Command Line Options
 
 | Option       | Description                                      | Default Value |  Constrains |
@@ -66,6 +78,7 @@ g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel -fopenmp```
 - When using scan modes (`--vscan` or `--bscan`), the `-n` option controls the number of points
 
 ## Output structure
+```text
 results/
 └── material=<material>/
     └── a=<radius>nm/
@@ -79,6 +92,7 @@ results/
             ├── b_scan_for_v=<velocity>c/       # Impact param scans
             │   └── ... 
             └── simulation_parameters.txt       # Metadata
+```
             
 ## For citations
 @software{AMTsolver,
