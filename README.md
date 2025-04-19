@@ -69,8 +69,8 @@ g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel -fopenmp```
 | `--bscan`    | Enable impact parameter scan mode                | false         | Requires `-n` for point count    |
 | `--contour`  | Enable velocity vs. impact parameter contour     | false         | Combines `--vscan` and `--bscan` |
 | `-e <float>` | Convergence threshold                            | 1e-4          | Must be > 0                      |
-| `-n <int>`   | Number of points in scans                        | 9             | Must be ≥ 2                       |
-| `-m <int>`   | Minimum multipole order (ℓ)                      | 1             | Must be ≥ 1                       |
+| `-n <int>`   | Number of points in scans                        | 9             | Must be ≥ 2                      |
+| `-m <int>`   | Minimum multipole order (ℓ)                      | 1             | Must be ≥ 1                      |
 
 **Notes:**
 - All numerical values must be positive
