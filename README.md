@@ -30,33 +30,34 @@ mkdir build
 
 # Standard build
 ```bash
-g++ -Iinclude -Iinclude/Dielectric/DrudeAl -c src/main.cpp -o build/main.out -lcomplex_bessel
-g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel
+g++ -Iinclude -c src/IN51.cpp -o build/IN51.o
+g++ -Iinclude -Iinclude/Dielectric/DrudeAl -c src/main.cpp -o build/main.o -lcomplex_bessel
+g++ build/IN51.o build/main.o -o bin/AMTsolver -lcomplex_bessel
 ```
 
 # Parallel build (OpenMP)
 ```bash
-g++ -fopenmp -O2 -std=c++17 -Iinclude -c src/main.cpp -o build/main.out -lcomplex_bessel
-g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel -fopenmp```
+g++ -fopenmp -O2 -std=c++17 -Iinclude -c src/main.cpp -o build/main.o -lcomplex_bessel
+g++ build/IN51.o build/main.o -o bin/AMTsolver -lcomplex_bessel -fopenmp```
 ```
 
 ## Basic Command (example)
 ```bash
-./AMTsolverL51 -a <radius_nm> -b <impact_param_nm> -v <velocity>
+./AMTsolver -a <radius_nm> -b <impact_param_nm> -v <velocity>
 ```
 
 ## Single Calculation
 ```bash
-./AMTsolverL51 -a 50.0 -b 55.0 -v 0.7
+./AMTsolver -a 50.0 -b 55.0 -v 0.7
 ```
 
 ## Velocity Scan (20 points)
 ```bash
-./AMTsolverL51 -a 50.0 -b 55.0 --vscan -n 20
+./AMTsolver -a 50.0 -b 55.0 --vscan -n 20
 ```
 ## Impact parameter scan
 ```bash
-./AMTsolverL51 -a 50.0 -v 0.7 --bscan -n 30 -e 1e-5
+./AMTsolver -a 50.0 -v 0.7 --bscan -n 30 -e 1e-5
 ```
 ## Command Line Options
 
@@ -101,4 +102,4 @@ results/
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/yourusername/AMTsolver}}
+  howpublished = {\url{https://github.com/LuisBrise/AMTsolver}}
