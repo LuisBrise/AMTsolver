@@ -60,22 +60,22 @@ g++ build/IN51.out build/main.out -o bin/AMTsolver -lcomplex_bessel -fopenmp```
 ```
 ## Command Line Options
 
-| Option       | Description                                      | Default Value |  Constrains |
-|--------------|--------------------------------------------------|---------------|
-| `-a`         | Nanoparticle radius (nm)                         | 1.0           |
-| `-b`         | Impact parameter (nm)                            | 1.5           |
-| `-v`         | Electron velocity (fraction of speed of light)   | 0.7           |
-| `--vscan`    | Enable velocity scan mode                        | false         |
-| `--bscan`    | Enable impact parameter scan mode                | false         |
-| `--contour`  | Enable velocity vs. impact parameter contour     | false         |
-| `-e`         | Convergence threshold for multipolar expansion   | 1e-4          |
-| `-n`         | Number of points in scans                        | 9             |
-| `-m`         | Minimum multipole order (ℓ) for calculations     | 1             |
+| Option       | Description                                      | Default Value | Constraints                      |
+|--------------|--------------------------------------------------|---------------|----------------------------------|
+| `-a <float>` | Nanoparticle radius (nm)                         | 1.0           | Must be > 0                      |
+| `-b <float>` | Impact parameter (nm)                            | 1.5           | Must be > NP radius (`-a`)       |
+| `-v <float>` | Electron velocity (fraction of c)                | 0.7           | 0.0 ≤ v ≤ 0.999                  |
+| `--vscan`    | Enable velocity scan mode                        | false         | Requires `-n` for point count    |
+| `--bscan`    | Enable impact parameter scan mode                | false         | Requires `-n` for point count    |
+| `--contour`  | Enable velocity vs. impact parameter contour     | false         | Combines `--vscan` and `--bscan` |
+| `-e <float>` | Convergence threshold                            | 1e-4          | Must be > 0                      |
+| `-n <int>`   | Number of points in scans                        | 9             | Must be ≥ 2                       |
+| `-m <int>`   | Minimum multipole order (ℓ)                      | 1             | Must be ≥ 1                       |
 
 **Notes:**
-- The impact parameter (`-b`) must be greater than the NP radius (`-a`)
-- Velocity (`-v`) must be between 0.0 and 0.999 (in units of c)
-- When using scan modes (`--vscan` or `--bscan`), the `-n` option controls the number of points
+- All numerical values must be positive
+- Scans generate data files in the output directory structure
+- Contour mode generates 2D parameter space analysis
 
 ## Output structure
 ```text
