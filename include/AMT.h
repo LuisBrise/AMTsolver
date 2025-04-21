@@ -47,7 +47,8 @@ cout << "Material : " << config.material << endl
      << "Is it a V vs B contour? - " << config.isBvsVContour << endl
      << "Multipolar threshold : " << config.errorThreshold << endl
      << "Number of points in the study : " << config.numOfPoints << endl
-     << "Minimum value of Lmax : " << config.minLmax << endl;
+     << "Minimum value of Lmax : " << config.minLmax << endl
+     << "______________________________________________________" << endl;
 }
 
 void DL(SimulationConfig& config, dcomplex DLy[6]){
@@ -250,8 +251,9 @@ for (int rr = 0; rr < 6; ++rr){
 }
 
 // Here print the dldw's, for each, w, l
-out << vv << '\t'
-         << b << '\t'
+out << config.velocity << '\t'
+         << config.b << '\t'
+         << w        << '\t'
          << dldwy[0] << '\t'
          << dldwy[1] << '\t'
          << dldwy[2] << '\t'
