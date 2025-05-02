@@ -23,16 +23,16 @@ return 1. + LL(w,  0.0*eV,     0.087*eV, 108.4*eV*eV)
 // performed using a 2*N +1 Konrod quadrature, the error is |K2n+1 - Gn|
 // Omega partition ******************************
 const int nw1 = 121;   
-const int nw2 = 181;   
-const int nw3 = 101;                   // Werner Au
-const int nw4 = 31;  
+const int nw2 = 201;   
+const int nw3 = 121;                   // Werner Au
+const int nw4 = 51;  
 const int NN = nw1 + nw2 + nw3 + nw4;
 
 
 double w1 = 0.;
-double w2 = .22;
-double w3 = 1.;
-double w4 = 5.;
+double w2 = .3;
+double w3 = 3.;
+double w4 = 10.;
 double w5 = 100.;   // This last frequency strongly depends of impact parameter and speed!!
                    // In Au, b=1.5nm a=1nm, for v=0.5 appx 35,  v=0.8 appx  50,v=.99 appx 180..
 

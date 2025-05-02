@@ -1,4 +1,7 @@
 // g++ -Iinclude -Iinclude/Dielectric/DrudeAl -c src/main.cpp -o build/main.o -lcomplex_bessel -w && g++ build/IN51.o build/main.o -o DrudeAl_AMTsolver_L51.out -lcomplex_bessel -w
+// g++ -Iinclude -Iinclude/Dielectric/WernerAu -c src/main.cpp -o build/main.o -lcomplex_bessel -w && g++ build/IN51.o build/main.o -o WernerAu_AMTsolver_L51.out -lcomplex_bessel -w
+// g++ -Iinclude -Iinclude/Dielectric/WernerAg -c src/main.cpp -o build/main.o -lcomplex_bessel -w && g++ build/IN51.o build/main.o -o WernerAg_AMTsolver_L51.out -lcomplex_bessel -w
+// g++ -Iinclude -Iinclude/Dielectric/WernerAu -c src/main.cpp -o build/main.o -lcomplex_bessel -w && g++ build/IN51.o build/main.o -o WernerBi_AMTsolver_L51.out -lcomplex_bessel -w
 
 #include "AMT.h"
 //*********************************************************************************************************

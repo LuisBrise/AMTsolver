@@ -23,9 +23,9 @@ return 1. + LL(w,  0.0*eV,     0.2*eV,   113.1*eV*eV)
 // performed using a 2*N +1 Konrod quadrature, the error is |K2n+1 - Gn|
 // Omega partition ******************************
 const int nw1 = 121;   
-const int nw2 = 181;   
-const int nw3 = 101;                   // Werner Au
-const int nw4 = 31;  
+const int nw2 = 201;   
+const int nw3 = 121;                   // Werner Au
+const int nw4 = 51;  
 const int NN = nw1 + nw2 + nw3 + nw4;
 
 
