@@ -16,7 +16,7 @@ void write_metadata(const fsm::path& dir, const SimulationConfig& config) {
     meta << "Material: " << config.material << "\n"
          << "Lmax: " << config.Lmax << "\n"
          << "Velocity: " << config.velocity << "c\n"
-         << "Integration surface: " << config.r << " nm\n"
+         << "Integration surface: " << config.r() << " nm\n"
          << "Impact param: " << config.b << " nm\n"
          << "NP radius: " << config.a << " nm\n"
          << "Date: " << get_current_timestamp();

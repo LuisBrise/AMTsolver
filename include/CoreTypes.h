@@ -21,21 +21,28 @@ struct SimulationConfig {
     double a;        // NP radius [nm]
     double b;        // Impact parameter [nm]
     double velocity; // [c units]
-    const bool isVScan;
-    const bool isBScan;
-    const bool isBvsVContour;
-    double bInit; // Initial value of impact parameter in scan
-    double bFin;  // Final value of impact parameter in scan 
-    double vvInit;  // Initial value of speed in scan
-    double vvFin;   // Final value of speed in scan
-    const double errorThreshold;
-    const int numOfPoints; // Number of points for b
-    int minLmax; // Minimum multipolar order
-    std::string timestamp;
-    double r;  // Always a + 0.05 (enforced at construction)    
 
-    // Constexpr constructor for compile-time checks
-    SimulationConfig(std::string mat, int lmax, 
+    bool isVScan;
+    bool isBScan;
+    bool isBvsVContour;
+
+    double bInit;
+    double bFin;
+    double vvInit;
+    double vvFin;
+
+    double errorThreshold;
+    int numOfPoints;
+    int minLmax;
+
+    std::string timestamp;
+
+    bool dump_dldw = false;
+
+    // Prefer computing r instead of storing it if you want it always consistent.
+    double r() const { return a + 0.05; }
+
+    SimulationConfig(std::string mat, int lmax,
                      double np_radius, double impact_param, double v,
                      bool vscan, bool bscan, bool bvsv,
                      double bi, double bf, double vi, double vf,
@@ -56,10 +63,12 @@ struct SimulationConfig {
           errorThreshold(err_thresh),
           numOfPoints(num_points),
           minLmax(minL),
-          timestamp(tmstmp),
-          r(np_radius + 0.05)  // Enforced relationship 
-          { 
+          timestamp(std::move(tmstmp))
+    {
         if (a <= 0) throw std::invalid_argument("NP radius must be positive");
+        if (Lmax < 1) throw std::invalid_argument("Lmax must be >= 1");
+        if (minLmax < 1 || minLmax > Lmax) throw std::invalid_argument("minLmax must be in [1, Lmax]");
+        if (numOfPoints <= 0) throw std::invalid_argument("numOfPoints must be positive");
     }
 };  
 

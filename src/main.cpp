@@ -12,6 +12,7 @@ int main(int argc, char** argv){
     double v;     // velocity (c units)
     bool isVScan = false; //Boolean for scan
     bool isBScan = false;
+    bool dumpdldw = false;
     bool isBvsVContour = false; // Boolean for contour 
     double threshold;
     int numOfPoints, minLmax;
@@ -35,6 +36,7 @@ int main(int argc, char** argv){
     app.add_option("--binit", bInit, "Initial value of impact parameter in scan");
     app.add_option("--bfin", bFin, "Final value of impact parameter in scan");
     
+    app.add_flag("--dumpdldw", dumpdldw, "Enable writing dldw files for spectral densities");
     app.add_flag("--contour", isBvsVContour, "Enable contour plot scan of angular momentum transfer as a function of velocity and impact parameter");
     
     app.add_option("-e", threshold, "Convergence threshold for the multipolar convergence")->default_val(pow(10, -4));
@@ -88,6 +90,8 @@ int main(int argc, char** argv){
                             numOfPoints,              // number of points in the scan or contour
                             minLmax,              // min value of Lmax for multipolar convergence
                             get_current_timestamp()); 
+    // Print dldw?
+    config.dump_dldw = dumpdldw;
     // 2-Calls the irreducibe integrals
     Initialize_Integrals(integrals);
 

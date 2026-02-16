@@ -128,27 +128,16 @@ dldwy[rr] = 0.;
 
 for (int l1 = 1; l1 <= Lmax; l1++){
      dl1 = 1.*l1; 
-    for (int l2 = 1; l2 <= Lmax; l2++){
+for (int l2 = 1; l2 <= Lmax; l2++){
          dl2 = 1.*l2; 
          for (int m1 = -l1; m1 <= l1; m1++){
               dm1 = 1.*m1;
-              //for (int m2 = -l2; m2 <= l2; m2++){
-                   //dm2 = 1.*m2;
+              for (int m2 = -l2; m2 <= l2; m2++){
+                   dm2 = 1.*m2;
 
-              // ---- case 1: m2 = m1 + 1 ----
-              {
-                    for (int rr = 0; rr < 4; ++rr) {
-                        IErty[rr] = 0.;
-                        IHrty[rr] = 0.;
-                        IErfy[rr] = 0.;
-                        IHrfy[rr] = 0.;
-                    }
+                    if(std::abs (m2-m1)==1){
 
-                    const int m2 = m1 + 1;
-                    if(m2 >= -l2 && m2 <= l2){
-                        dm2 = 1.*m2;
-
-                        // Radial - Radial
+                                    // Radial - Radial
                         normfactor = pow((2.*dl1+1.)*(l1+m1+1.)/((2.*dl1+3.)*(l1-m1+1.)),0.5);
 
                         IV1 = integrals.IV[l1-1][l2-1][m1+l1][m2+l2];
@@ -224,113 +213,19 @@ for (int l1 = 1; l1 <= Lmax; l1++){
                               - (dl1-dm1+1.)*IW2)+ CM[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(df[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1); 
 
                     }
-              }
-                        /* Integrants (dldw), 0 -> Ext-Scat (Electric)
-                                       1 -> Ext-Scat (Magnetic)
-                                       2 -> Scat-Scat (Electric) 
-                                       3 -> Scat-Scat (Magnetic)
-                                       4 -> Ext-Ext (Electric)
-                                       5 -> Ext-Ext (Magnetic)*/
-
-                    dldwy[0] +=  (1./(4.*Pi))*pow(r,3)*(( IErty[2] - IErfy[2] ).real()
-                                                    +( IErty[3] - IErfy[3] ).real());
-                    dldwy[1] +=  (1./(4.*Pi))*pow(r,3)*((IHrty[2] -IHrfy[2]).real()
-                                                    +(IHrty[3] -IHrfy[3]).real());
-                    dldwy[2] +=  (1./(4.*Pi))*pow(r,3)*( IErty[0] - IErfy[0] ).real();
-                    dldwy[3] +=  (1./(4.*Pi))*pow(r,3)*(IHrty[0] -IHrfy[0]).real();
-                    dldwy[4] +=  (1./(4.*Pi))*pow(r,3)*( IErty[1] - IErfy[1] ).real();
-                    dldwy[5] +=  (1./(4.*Pi))*pow(r,3)*(IHrty[1] -IHrfy[1]).real();
-
-              // ---- case 2: m2 = m1 - 1 ----
-              {
-                    for (int rr = 0; rr < 4; ++rr) {
-                        IErty[rr] = 0.;
-                        IHrty[rr] = 0.;
-                        IErfy[rr] = 0.;
-                        IHrfy[rr] = 0.;
-                    }
-                    
-                    const int m2 = m1 - 1;
-                    if(m2 >= -l2 && m2 <= l2){
-                        dm2 = 1.*m2;
-
-                        // Radial - Radial
-                        normfactor = pow((2.*dl1+1.)*(l1+m1+1.)/((2.*dl1+3.)*(l1-m1+1.)),0.5);
-
-                        IV1 = integrals.IV[l1-1][l2-1][m1+l1][m2+l2];
-
-                        IW1 = integrals.IW[l1-1][l2-1][m1+l1][m2+l2];
-                        IW2 = normfactor*integrals.IW[l1][l2-1][m1+l1+1][m2+l2];   
-
-                        IU1 = integrals.IU[l1-1][l2-1][m1+l1][m2+l2];
-                        IU2 = normfactor*integrals.IU[l1][l2-1][m1+l1+1][m2+l2];
-
-                        /* Integrants, 0 -> Scat
-                                       1 -> Ext
-                                       2 -> Ext-Scat 
-                                       3 -> Scat-Ext (second is conjugated)*/
 
 
+                else{
+                  for (int rr = 0; rr < 4; ++rr){
 
-                    // Zenital - Radial
+                     IErty[rr] = 0.;
+                     IHrty[rr] = 0.;
 
-                    // y component
-
-                    IErty[0] = (- tEl[l1-1]*DE[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(df[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1 
-                              - (dl1-dm1+1.)*IU2) - tMl[l1-1]*CM[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(dz[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-     
-                    IHrty[0] = (- tMl[l1-1]*CM[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(df[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1
-                              - (dl1-dm1+1.)*IU2) + tEl[l1-1]*DE[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(dz[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-
-
-                    IErty[1] =  0.0;
-     
-                    IHrty[1] =  0.0;
-
-
-                    IErty[2] = (- tEl[l1-1]*DE[l1-1][m1+l1]*conj(DE[l2-1][m2+l2]*dz[1][l2-1])*(df[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1 
-                              - (dl1-dm1+1.)*IU2) - tMl[l1-1]*CM[l1-1][m1+l1]*conj(DE[l2-1][m2+l2]*dz[1][l2-1])*(dz[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-     
-                    IHrty[2] = (- tMl[l1-1]*CM[l1-1][m1+l1]*conj(CM[l2-1][m2+l2]*dz[1][l2-1])*(df[1][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1
-                              - (dl1-dm1+1.)*IU2) + tEl[l1-1]*DE[l1-1][m1+l1]*conj(CM[l2-1][m2+l2]*dz[1][l2-1])*(dz[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-
-
-                    IErty[3] = (- DE[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(df[1][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1 
-                              - (dl1-dm1+1.)*IU2) - CM[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(dz[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-     
-                    IHrty[3] = (- CM[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(df[1][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IW1
-                              - (dl1-dm1+1.)*IU2) + DE[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(dz[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IU1);
-
-
-                    // Azimutal - Radial
-
-
-                    // y compo
-
-                    IErfy[0] =  -(dm1-dm2)*( tMl[l1-1]*CM[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(dz[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ tEl[l1-1]*DE[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(df[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1); 
-
-                    IHrfy[0] =  -(dm1-dm2)*( -tEl[l1-1]*DE[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(dz[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ tMl[l1-1]*CM[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(df[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1); 
-
-                    IErfy[1] = 0.0; 
-
-                    IHrfy[1] =  0.0;  
-
-                    IErfy[2] =  -(dm1-dm2)*( tMl[l1-1]*CM[l1-1][m1+l1]*conj(DE[l2-1][m2+l2]*dz[1][l2-1])*(dz[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ tEl[l1-1]*DE[l1-1][m1+l1]*conj(DE[l2-1][m2+l2]*dz[1][l2-1])*(df[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1); 
-
-                    IHrfy[2] =  -(dm1-dm2)*( -tEl[l1-1]*DE[l1-1][m1+l1]*conj(CM[l2-1][m2+l2]*dz[1][l2-1])*(dz[0][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ tMl[l1-1]*CM[l1-1][m1+l1]*conj(CM[l2-1][m2+l2]*dz[1][l2-1])*(df[0][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1);
-
-                    IErfy[3] =  -(dm1-dm2)*( CM[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(dz[1][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ DE[l1-1][m1+l1]*conj(tEl[l2-1]*DE[l2-1][m2+l2]*dz[0][l2-1])*(df[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1);  
-
-                    IHrfy[3] =  -(dm1-dm2)*( -DE[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(dz[1][l1-1]/(k0*r))*dl2*(dl2+1.)*((dl1+1.)*IV1 
-                              - (dl1-dm1+1.)*IW2)+ CM[l1-1][m1+l1]*conj(tMl[l2-1]*CM[l2-1][m2+l2]*dz[0][l2-1])*(df[1][l1-1]/(k0*r))*dm1*dl2*(dl2+1.)*IW1); 
+                     IErfy[rr] = 0.;
+                     IHrfy[rr] = 0.;
 
                     }
-              }
+                   }
 
                         /* Integrants (dldw), 0 -> Ext-Scat (Electric)
                                        1 -> Ext-Scat (Magnetic)
@@ -348,7 +243,7 @@ for (int l1 = 1; l1 <= Lmax; l1++){
                     dldwy[4] +=  (1./(4.*Pi))*pow(r,3)*( IErty[1] - IErfy[1] ).real();
                     dldwy[5] +=  (1./(4.*Pi))*pow(r,3)*(IHrty[1] -IHrfy[1]).real();
 
-            //} // for m2
+            } // for m2
         }  // for m1
 
 } // for l2
