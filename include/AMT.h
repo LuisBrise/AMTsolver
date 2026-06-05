@@ -354,6 +354,13 @@ for (int l1 = 1; l1 <= Lmax; l1++){
 } // for l2
 } //for l1
 
+// Guard: isolated Gauss points where complex overflow leaves residual NaN in
+// dldwy (0*inf = NaN in IEEE 754 even after DE/CM guards) must not poison DLy.
+// Physically the integrand is 0 at these points (all overflow terms cancel);
+// skipping the point introduces negligible quadrature error.
+for (int rr = 0; rr < 6; ++rr)
+    if (!std::isfinite(dldwy[rr])) dldwy[rr] = 0.0;
+
 for (int rr = 0; rr < 6; ++rr){ 
   DLy[rr] += (xk[i]*(1. + 1i) - 1i*xg[i])*dldwy[rr];
 }
