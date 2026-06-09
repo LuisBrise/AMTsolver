@@ -652,7 +652,103 @@ void AMTsolver(SimulationConfig& config){
         cout << endl;*/
     }
     else if (config.isBvsVContour){
-        return;
+        // 2D convergence tracking: previousLy[vi][bi]
+        vector<vector<double>> previousLy(config.numOfPoints + 1,
+                                          vector<double>(config.numOfPoints + 1, 0.0));
+
+        auto multipolarfilename = generate_multconvan_path(config);
+        std::ofstream mout(multipolarfilename);
+        mout.precision(17);
+        mout << "Lmax\t\t\tAverage Relative Error\n";
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        for (config.Lmax = config.minLmax; config.Lmax <= LSmax; config.Lmax++){
+
+            cout << "Progress: "
+                 << "Lmax : " << config.Lmax
+                 << " | NP radius: " << config.a << " nm" << endl;
+
+            auto filename = generate_AMT_path(config, "y");
+            std::ofstream out(filename);
+            out.precision(17);
+            out << "vv\tb\tDLEy\t\t\tDLHy\t\t\tDLEsy\t\t\tDLHsy\t\t\tDLEsyExt\t\t\tDLHsyExt\t\t\tDLy\n";
+
+            auto errorfilename = generate_AMT_path(config, "y", "error_");
+            std::ofstream eout(errorfilename);
+            eout.precision(17);
+            eout << "vv\tb\terrDLEy\t\t\terrDLHy\t\t\terrDLEsy\t\t\terrDLHsy\t\t\terrDLEsyExt\t\t\terrDLHsyExt\n";
+
+            double totalRelativeError = 0.0;
+            bool thresholdReached = false;
+
+            for (int vi = 0; vi <= config.numOfPoints; ++vi){
+                config.velocity = config.vvInit
+                    + (config.vvFin - config.vvInit) * vi / config.numOfPoints;
+                Initialize_ScatteringFunctions(AA, BB, config.velocity);
+
+                for (int bi = 0; bi <= config.numOfPoints; ++bi){
+                    config.b = config.bInit
+                        + (config.bFin - config.bInit) * bi / config.numOfPoints;
+
+                    printf("v : %3.2f, b : %4.1f   -->   ", config.velocity, config.b);
+                    DL(config, DLy);
+                    double Ly = 0.0;
+                    for (int rr = 0; rr < 6; ++rr)
+                        Ly += DLy[rr].real();
+
+                    double errorLy = fabs(Ly - previousLy[vi][bi]);
+                    double relativeError = errorLy / fabs(Ly);
+                    totalRelativeError += relativeError;
+
+                    out << config.velocity << '\t'
+                        << config.b << '\t'
+                        << DLy[0].real() << '\t'
+                        << DLy[1].real() << '\t'
+                        << DLy[2].real() << '\t'
+                        << DLy[3].real() << '\t'
+                        << DLy[4].real() << '\t'
+                        << DLy[5].real() << '\t'
+                        << Ly << '\n';
+                    eout << config.velocity << '\t'
+                         << config.b << '\t'
+                         << DLy[0].imag() << '\t'
+                         << DLy[1].imag() << '\t'
+                         << DLy[2].imag() << '\t'
+                         << DLy[3].imag() << '\t'
+                         << DLy[4].imag() << '\t'
+                         << DLy[5].imag() << '\n';
+
+                    previousLy[vi][bi] = Ly;
+                }
+            }
+
+            int totalPoints = (config.numOfPoints + 1) * (config.numOfPoints + 1);
+            double averageRelativeError = totalRelativeError / totalPoints;
+            mout << config.Lmax << '\t' << averageRelativeError << '\n';
+            cout << "Average Relative Error is: " << averageRelativeError << endl;
+            cout << "------------------------------------------------------" << endl << endl;
+
+            if (averageRelativeError < config.errorThreshold) {
+                thresholdReached = true;
+                mout << "Convergence achieved at Lmax = " << config.Lmax
+                     << " with average relative error = " << averageRelativeError << '\n';
+                cout << "Convergence achieved at Lmax = " << config.Lmax
+                     << " with average relative error = " << averageRelativeError << endl;
+                cout << "------------------------------------------------------" << endl << endl;
+            }
+
+            out.close();
+            eout.close();
+
+            if (thresholdReached) break;
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        cout << "Execution time: " << duration.count() << " seconds." << std::endl;
+        mout << "Execution time: " << duration.count() << " seconds." << std::endl;
+        mout.close();
     }
     else{
 
