@@ -44,12 +44,18 @@ fsm::path generate_multconvan_path(const SimulationConfig& config) {
         oss_v << "b_scan_for_v=" << std::setprecision(2) << config.velocity << "c";
         dir /= oss_v.str();
     }
-    else if (config.isBvsVContour) {
-        std::ostringstream oss_vb;
-        oss_vb  << "b_vs_v_contour_for_v=" << std::setprecision(2) << config.velocity << "c"
-           << "_and_b=" << std::setprecision(2) << config.b << "nm";
-        dir /= oss_vb.str();
-    }
+    else if (config.isBvsVContour)
+	{
+    std::ostringstream oss_vb;
+
+    oss_vb
+        << "b_vs_v_contour"
+        << "_v=" << std::fixed << std::setprecision(2)
+        << config.vvInit << "-" << config.vvFin << "c"
+        << "_b=" << config.bInit << "-" << config.bFin << "nm";
+
+    dir /= oss_vb.str();
+	}
 
     dir /= config.timestamp;
 
@@ -113,10 +119,16 @@ fsm::path generate_AMT_path(const SimulationConfig& config,
                  << ".dat";
     }
     else if (config.isBvsVContour) {
-        std::ostringstream oss_vb;
-        oss_vb  << "b_vs_v_contour_for_v=" << std::setprecision(2) << config.velocity << "c"
-           << "_and_b=" << std::setprecision(2) << config.b << "nm";
-        dir /= oss_vb.str();
+    std::ostringstream oss_vb;
+
+    oss_vb
+        << "b_vs_v_contour"
+        << "_v=" << std::fixed << std::setprecision(2)
+        << config.vvInit << "-" << config.vvFin << "c"
+        << "_b=" << config.bInit << "-" << config.bFin << "nm";
+
+    dir /= oss_vb.str();
+
         filename << "DL" << component << "_"
                  << config.material << "_"
                  << "a" << std::setprecision(2) << config.a << "nm_"
