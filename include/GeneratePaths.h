@@ -195,7 +195,7 @@ fsm::path generate_dldw_path(const SimulationConfig& config,
     std::ostringstream filename;
     filename << ("dldw" + component + "_")
              << config.material << "_"
-             << "v" << std::setprecision(2) << config.velocity << "c_"
+             << "v" << std::setprecision(4) << config.velocity << "c_"
              << "b" << std::setprecision(3) << config.b << "nm_"
              << "a" << std::setprecision(2) << config.a << "nm_"
              << config.timestamp << ".dat";
